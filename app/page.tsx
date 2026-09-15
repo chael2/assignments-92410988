@@ -1,10 +1,6 @@
 import Link from 'next/link'
 import { Counter } from '@/components/Counter'
 
-// app/page.tsx는 "/" 경로를 담당합니다 (File-based Routing).
-// 이 파일은 별도로 "use client"를 선언하지 않았으므로 기본값인
-// Server Component입니다 — 서버에서만 실행되고, 브라우저로는
-// 완성된 HTML만 전달됩니다.
 export default function Home() {
   return (
     <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
@@ -29,7 +25,13 @@ export default function Home() {
           href="/about"
           className="text-sm font-medium text-zinc-950 underline underline-offset-4 dark:text-zinc-50"
         >
-          /about 페이지로 이동 (파일 기반 라우팅 확인) →
+          /about 페이지로 이동 →
+        </Link>
+        <Link
+          href="/products"
+          className="font-medium text-zinc-950 underline underline-offset-4 dark:text-zinc-50"
+        >
+          /products →
         </Link>
       </main>
     </div>
