@@ -14,7 +14,7 @@ export default function Home() {
         </span>
 
         <h1 className="text-3xl font-semibold tracking-tight text-black dark:text-zinc-50">
-          웹서버보안프로그래밍 — 3주차
+          웹서버보안프로그래밍 — 함유진
         </h1>
         <p className="max-w-md text-base leading-7 text-zinc-600 dark:text-zinc-400">
           create-next-app으로 만든 Next.js 16 App Router 템플릿입니다. 이
