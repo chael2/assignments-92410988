@@ -20,19 +20,6 @@ export default function Home() {
 
         {/* Counter는 useState를 쓰는 Client Component 입니다. */}
         <Counter />
-
-        <Link
-          href="/about"
-          className="text-sm font-medium text-zinc-950 underline underline-offset-4 dark:text-zinc-50"
-        >
-          /about 페이지로 이동 →
-        </Link>
-        <Link
-          href="/products"
-          className="font-medium text-zinc-950 underline underline-offset-4 dark:text-zinc-50"
-        >
-          /products →
-        </Link>
       </main>
     </div>
   )
