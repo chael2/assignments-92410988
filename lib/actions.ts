@@ -26,5 +26,7 @@ export async function createNoticeAction(formData: FormData) {
 
   const notice = await createNotice({ title, author, content })
   revalidatePath('/notices')
-  redirect(`/notices/${notice.id}`)
+
+  const targetId = (notice as any)._id?.toString() ?? notice.id
+  redirect(`/notices/${targetId}`)
 }
