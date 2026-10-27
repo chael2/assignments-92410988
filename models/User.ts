@@ -1,5 +1,8 @@
 import { Schema, model, models } from 'mongoose'
 
+// 비밀번호는 절대로 평문(원문 그대로)으로 저장하지 않습니다.
+// passwordHash에는 bcrypt로 해시(단방향 암호화)한 값만 들어갑니다 —
+// 이 값을 그대로 봐도 원래 비밀번호를 알 수 없어야 합니다.
 const userSchema = new Schema(
   {
     name: { type: String, required: true, trim: true },
@@ -11,6 +14,10 @@ const userSchema = new Schema(
       lowercase: true,
     },
     passwordHash: { type: String, required: true },
+    // 권한(RBAC)의 가장 단순한 형태 — 역할이 두 가지뿐입니다.
+    // 기본값은 "user"이며, admin은 지금은 DB에서 직접 바꿔서 실습합니다
+    // (관리자 승격 화면은 만들지 않습니다 — 그 자체가 공격 표면이 되기 쉽습니다).
+    role: { type: String, enum: ['user', 'admin'], default: 'user' },
   },
   { timestamps: true },
 )

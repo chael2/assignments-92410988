@@ -37,6 +37,11 @@ export async function SiteHeader() {
             <div className="flex items-center gap-3">
               <span className="text-zinc-500 dark:text-zinc-400">
                 {session.user.name}님
+                {session.user.role === 'admin' && (
+                  <span className="ml-1.5 rounded bg-black/[.06] px-1.5 py-0.5 text-xs font-medium text-zinc-600 dark:bg-white/[.08] dark:text-zinc-300">
+                    관리자
+                  </span>
+                )}
               </span>
               <form action={logoutAction}>
                 <button
