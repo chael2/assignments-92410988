@@ -1,8 +1,3 @@
-// 6주차의 MongoDB 조회 위에, 9주차부터 "누가 썼는가"가 추가됩니다.
-// author(자유 입력 텍스트) 대신 authorId/authorName을 저장합니다 — 이 값은
-// 사용자가 폼에 입력하는 게 아니라 로그인 세션에서 서버가 채워 넣습니다
-// (lib/actions.ts의 createNoticeAction 참고).
-
 import { connectDB } from './mongodb'
 import { Notice as NoticeModel } from '@/models/Notice'
 
@@ -15,7 +10,6 @@ export type Notice = {
   createdAt: string
 }
 
-// Mongoose 문서를 화면에서 쓰는 평범한 객체(Notice)로 변환합니다.
 type NoticeDocLike = {
   _id: unknown
   title: string

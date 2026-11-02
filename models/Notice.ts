@@ -7,7 +7,7 @@ const noticeSchema = new Schema(
     authorId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
     authorName: { type: String, required: true, trim: true },
   },
-  { timestamps: true }, // createdAt / updatedAt 필드를 자동으로 추가
+  { timestamps: true },
 )
 
 export const Notice = models.Notice || model('Notice', noticeSchema)
