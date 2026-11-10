@@ -106,3 +106,8 @@ export async function getProductsByIds(ids: string[]): Promise<Product[]> {
     return []
   }
 }
+
+export async function decrementStock(productId: string, qty: number) {
+  await connectDB()
+  await ProductModel.updateOne({ _id: productId }, { $inc: { stock: -qty } })
+}

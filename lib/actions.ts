@@ -3,8 +3,15 @@
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { AuthError } from 'next-auth'
-import { getProduct } from '@/lib/products'
-import { addToCart, updateCartQty, removeFromCart } from '@/lib/cart'
+import { getProduct, getProductsByIds, decrementStock } from '@/lib/products'
+import {
+  addToCart,
+  updateCartQty,
+  removeFromCart,
+  getCartLines,
+  clearCart,
+} from '@/lib/cart'
+import { createOrder } from '@/lib/orders'
 import { createNotice, deleteNotice, getNotice } from '@/lib/notices'
 import { createUser } from '@/lib/users'
 import { signIn, signOut, auth } from '@/auth'
@@ -52,6 +59,48 @@ export async function removeFromCartAction(formData: FormData) {
   }
   await removeFromCart(productId)
   revalidatePath('/', 'layout')
+}
+
+export async function checkoutAction() {
+  const session = await auth()
+  if (!session?.user) {
+    redirect('/login')
+  }
+
+  const lines = await getCartLines()
+  if (lines.length === 0) {
+    throw new Error('장바구니가 비어 있습니다.')
+  }
+
+  const products = await getProductsByIds(lines.map((line) => line.productId))
+  const items = lines
+    .map((line) => {
+      const product = products.find((p) => p.id === line.productId)
+      if (!product) return null
+      const qty = Math.min(line.qty, product.stock)
+      if (qty <= 0) return null
+      return {
+        productId: product.id,
+        name: product.name,
+        price: product.price,
+        qty,
+      }
+    })
+    .filter((item): item is NonNullable<typeof item> => item !== null)
+
+  if (items.length === 0) {
+    throw new Error('주문할 수 있는 상품이 없습니다(품절되었을 수 있습니다).')
+  }
+
+  const order = await createOrder(session.user.id, items)
+  await Promise.all(
+    items.map((item) => decrementStock(item.productId, item.qty)),
+  )
+  await clearCart()
+
+  revalidatePath('/', 'layout')
+  revalidatePath('/orders')
+  redirect(`/orders/${order.id}`)
 }
 
 export async function createNoticeAction(formData: FormData) {

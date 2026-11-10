@@ -48,6 +48,12 @@ export async function SiteHeader() {
           </Link>
           {session?.user ? (
             <div className="flex items-center gap-3">
+              <Link
+                href="/orders"
+                className="hover:text-black dark:hover:text-zinc-50"
+              >
+                주문내역
+              </Link>
               <span className="text-zinc-500 dark:text-zinc-400">
                 {session.user.name}님
                 {session.user.role === 'admin' && (

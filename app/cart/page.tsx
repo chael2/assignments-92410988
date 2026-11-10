@@ -1,9 +1,15 @@
 import Link from 'next/link'
+import { auth } from '@/auth'
 import { getCartLines } from '@/lib/cart'
 import { getProductsByIds } from '@/lib/products'
-import { updateCartQtyAction, removeFromCartAction } from '@/lib/actions'
+import {
+  updateCartQtyAction,
+  removeFromCartAction,
+  checkoutAction,
+} from '@/lib/actions'
 
 export default async function CartPage() {
+  const session = await auth()
   const lines = await getCartLines()
   const products = await getProductsByIds(lines.map((line) => line.productId))
 
@@ -98,15 +104,28 @@ export default async function CartPage() {
             <p className="text-lg font-semibold text-black dark:text-zinc-50">
               총 {total.toLocaleString()}원
             </p>
-            <button
-              type="button"
-              disabled
-              title="결제/주문 생성은 11주차에서 완성합니다"
-              className="cursor-not-allowed rounded-md bg-black/30 px-4 py-2 text-sm font-medium text-white dark:bg-white/30"
-            >
-              결제하기 (11주차 예정)
-            </button>
+            {session?.user ? (
+              <form action={checkoutAction}>
+                <button
+                  type="submit"
+                  className="rounded-md bg-black px-4 py-2 text-sm font-medium text-white hover:bg-black/85 dark:bg-white dark:text-black"
+                >
+                  결제하기
+                </button>
+              </form>
+            ) : (
+              <Link
+                href="/login"
+                className="rounded-md bg-black px-4 py-2 text-sm font-medium text-white hover:bg-black/85 dark:bg-white dark:text-black"
+              >
+                로그인하고 결제하기
+              </Link>
+            )}
           </div>
+          <p className="mt-3 text-right text-xs text-zinc-400 dark:text-zinc-500">
+            여기 보이는 가격은 참고용입니다 — checkoutAction이 결제 직전 DB에서
+            다시 계산합니다.
+          </p>
         </>
       )}
     </div>
